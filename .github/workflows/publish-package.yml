@@ -29,10 +29,10 @@ jobs:
           zip -r ../dist/ArgoApp.Manifests.${{ steps.version.outputs.version }}.zip .
 
       - name: Push package to Octopus
+        env:
+          OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
+          OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_API_KEY }}
+          OCTOPUS_SPACE: ${{ secrets.OCTOPUS_SPACE_ID }}
         run: |
           octopus package upload \
-            --package "dist/ArgoApp.Manifests.${{ steps.version.outputs.version }}.zip" \
-            --server "${{ secrets.OCTOPUS_URL }}" \
-            --api-key "${{ secrets.OCTOPUS_API_KEY }}" \
-            --space "${{ secrets.OCTOPUS_SPACE_ID }}" \
-            --no-prompt
+            --package "dist/ArgoApp.Manifests.${{ steps.version.outputs.version }}.zip"
