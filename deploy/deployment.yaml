@@ -5,7 +5,7 @@ metadata:
   labels:
     app: argoapp
 spec:
-  replicas: 3
+  replicas: #{Replicas}
   selector:
     matchLabels:
       app: argoapp
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: argoapp
-          image: nginx:1.25
+          image: #{ImageName}:#{ImageTag}
           ports:
             - containerPort: 80
           resources:
