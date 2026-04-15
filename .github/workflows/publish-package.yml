@@ -24,17 +24,15 @@ jobs:
 
       - name: Pack deploy/ folder into Octopus package
         run: |
-          octopus package zip create \
-            --id ArgoApp.Manifests \
-            --version ${{ steps.version.outputs.version }} \
-            --base-path deploy \
-            --out-folder ./dist
+          mkdir -p dist
+          cd deploy
+          zip -r ../dist/ArgoApp.Manifests.${{ steps.version.outputs.version }}.zip .
 
       - name: Push package to Octopus
         run: |
           octopus package upload \
-            --package ./dist/ArgoApp.Manifests.${{ steps.version.outputs.version }}.zip \
-            --server ${{ secrets.OCTOPUS_URL }} \
-            --api-key ${{ secrets.OCTOPUS_API_KEY }} \
-            --space ${{ secrets.OCTOPUS_SPACE_ID }} \
+            --package "dist/ArgoApp.Manifests.${{ steps.version.outputs.version }}.zip" \
+            --server "${{ secrets.OCTOPUS_URL }}" \
+            --api-key "${{ secrets.OCTOPUS_API_KEY }}" \
+            --space "${{ secrets.OCTOPUS_SPACE_ID }}" \
             --no-prompt
