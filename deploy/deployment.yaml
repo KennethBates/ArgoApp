@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argoapp
+  labels:
+    app: argoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argoapp
+  template:
+    metadata:
+      labels:
+        app: argoapp
+    spec:
+      containers:
+        - name: argoapp
+          image: nginx:1.25
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
