@@ -1,0 +1,40 @@
+name: Publish Manifests Package to Octopus
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "deploy/**"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set package version
+        id: version
+        # Uses the short Git SHA as the patch version so every push is unique
+        run: echo "version=1.0.$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Install Octopus CLI
+        uses: OctopusDeploy/install-octopus-cli-action@v3
+
+      - name: Pack deploy/ folder into Octopus package
+        run: |
+          octopus package zip create \
+            --id ArgoApp.Manifests \
+            --version ${{ steps.version.outputs.version }} \
+            --base-path deploy \
+            --out-folder ./dist
+
+      - name: Push package to Octopus
+        run: |
+          octopus package upload \
+            --package ./dist/ArgoApp.Manifests.${{ steps.version.outputs.version }}.zip \
+            --server ${{ secrets.OCTOPUS_URL }} \
+            --api-key ${{ secrets.OCTOPUS_API_KEY }} \
+            --space ${{ secrets.OCTOPUS_SPACE_ID }} \
+            --no-prompt
