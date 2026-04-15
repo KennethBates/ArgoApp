@@ -1,6 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
-# Managed by Octopus Deploy — tokens resolved at deploy time. v4
+# Managed by Octopus Deploy — tokens resolved at deploy time. v5
 metadata:
   name: argoapp
   labels:

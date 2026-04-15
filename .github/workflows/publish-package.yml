@@ -16,8 +16,8 @@ jobs:
 
       - name: Set package version
         id: version
-        # Uses the short Git SHA as the patch version so every push is unique
-        run: echo "version=1.0.$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        # SemVer format: 1.0.<run_number> — unique per push, valid for Octopus
+        run: echo "version=1.0.${{ github.run_number }}" >> $GITHUB_OUTPUT
 
       - name: Install Octopus CLI
         uses: OctopusDeploy/install-octopus-cli-action@v3
