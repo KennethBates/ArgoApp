@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
-# Managed by Octopus Deploy — tokens resolved at deploy time. v5
+# Managed by Octopus Deploy — image and replicas patched at deploy time via yq
 metadata:
   name: argoapp
   labels:
     app: argoapp
 spec:
-  replicas: #{Replicas}
+  replicas: 1
   selector:
     matchLabels:
       app: argoapp
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: argoapp
-          image: #{ImageName}:#{ImageTag}
+          image: nginx:1.25
           ports:
             - containerPort: 80
           resources:
