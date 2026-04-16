@@ -1,6 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
-# Managed by Octopus Deploy — image and replicas patched at deploy time via yq
+# Managed by Octopus Deploy — image and replicas patched at deploy time via yq. Build 1
 metadata:
   name: argoapp
   labels:
