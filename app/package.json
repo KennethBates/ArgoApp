@@ -1,0 +1,13 @@
+{
+  "name": "argoapp",
+  "version": "1.0.0",
+  "description": "Demo Node.js app for ArgoCD / Octopus Deploy pipeline",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

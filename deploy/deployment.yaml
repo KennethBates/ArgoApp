@@ -17,9 +17,12 @@ spec:
     spec:
       containers:
         - name: argoapp
-          image: nginx:1.25
+          image: kennethbates/argoapp:latest
           ports:
-            - containerPort: 80
+            - containerPort: 3000
+          env:
+            - name: APP_ENV
+              value: development
           resources:
             requests:
               cpu: "50m"
