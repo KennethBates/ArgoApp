@@ -2,7 +2,6 @@ version: "1.0"
 
 stages:
   - build
-  - package
   - deploy
 
 steps:
@@ -35,31 +34,7 @@ steps:
       - node test.js
     working_directory: /app
 
-  # ── 3. Pack deploy/ manifests into an Octopus zip package ───────────────────
-  pack_manifests:
-    title: Pack manifests for Octopus
-    stage: package
-    image: alpine:3.19
-    commands:
-      - apk add --no-cache zip
-      - mkdir -p $CF_VOLUME_PATH/dist
-      - cd $CF_VOLUME_PATH/$CF_REPO_NAME/deploy && zip -r $CF_VOLUME_PATH/dist/ArgoApp.Manifests.$CF_BUILD_ID.0.0.zip .
-      - echo "Packed $CF_VOLUME_PATH/dist/ArgoApp.Manifests.$CF_BUILD_ID.0.0.zip"
-
-  # ── 4. Push package to Octopus built-in feed ────────────────────────────────
-  push_to_octopus:
-    title: Push package to Octopus Deploy
-    stage: package
-    image: octopusdeploy/octo:latest
-    commands:
-      - |
-        octo push \
-          --package $CF_VOLUME_PATH/dist/ArgoApp.Manifests.$CF_BUILD_ID.0.0.zip \
-          --server $OCTOPUS_URL \
-          --apiKey $OCTOPUS_API_KEY \
-          --space $OCTOPUS_SPACE_ID
-
-  # ── 5. Create and deploy an Octopus release ─────────────────────────────────
+  # ── 3. Create and deploy an Octopus release ─────────────────────────────────
   create_octopus_release:
     title: Create & deploy Octopus release
     stage: deploy
@@ -68,7 +43,7 @@ steps:
       - |
         octo create-release \
           --project "$OCTOPUS_PROJECT" \
-          --packageVersion $CF_BUILD_ID.0.0 \
+          --packageVersion $CF_SHORT_REVISION \
           --server $OCTOPUS_URL \
           --apiKey $OCTOPUS_API_KEY \
           --space $OCTOPUS_SPACE_ID \
