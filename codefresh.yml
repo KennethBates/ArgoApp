@@ -52,11 +52,12 @@ steps:
     stage: package
     image: octopusdeploy/octo:latest
     commands:
-      - octo push
-        --package $CF_VOLUME_PATH/dist/ArgoApp.Manifests.$CF_BUILD_ID.0.0.zip
-        --server $OCTOPUS_URL
-        --apiKey $OCTOPUS_API_KEY
-        --space $OCTOPUS_SPACE_ID
+      - |
+        octo push \
+          --package $CF_VOLUME_PATH/dist/ArgoApp.Manifests.$CF_BUILD_ID.0.0.zip \
+          --server $OCTOPUS_URL \
+          --apiKey $OCTOPUS_API_KEY \
+          --space $OCTOPUS_SPACE_ID
 
   # ── 5. Create and deploy an Octopus release ─────────────────────────────────
   create_octopus_release:
@@ -64,12 +65,13 @@ steps:
     stage: deploy
     image: octopusdeploy/octo:latest
     commands:
-      - octo create-release
-        --project "$OCTOPUS_PROJECT"
-        --packageVersion $CF_BUILD_ID.0.0
-        --server $OCTOPUS_URL
-        --apiKey $OCTOPUS_API_KEY
-        --space $OCTOPUS_SPACE_ID
-        --deployTo "$OCTOPUS_ENVIRONMENT"
-        --waitForDeployment
-        --deploymentTimeout 00:10:00
+      - |
+        octo create-release \
+          --project "$OCTOPUS_PROJECT" \
+          --packageVersion $CF_BUILD_ID.0.0 \
+          --server $OCTOPUS_URL \
+          --apiKey $OCTOPUS_API_KEY \
+          --space $OCTOPUS_SPACE_ID \
+          --deployTo "$OCTOPUS_ENVIRONMENT" \
+          --waitForDeployment \
+          --deploymentTimeout 00:10:00
