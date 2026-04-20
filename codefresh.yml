@@ -7,6 +7,14 @@ stages:
 
 steps:
 
+  # ── 0. Clone repo ────────────────────────────────────────────────────────────
+  clone:
+    title: Clone repository
+    type: git-clone
+    repo: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
+    revision: "${{CF_REVISION}}"
+    git: github-kenny
+
   # ── 1. Build & push Docker image ────────────────────────────────────────────
   build_image:
     title: Build Docker image
