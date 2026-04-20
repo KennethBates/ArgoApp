@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: argoapp
-          image: kennyocto/argo:latest
+          image: kennyocto/argo:6b0e142
           ports:
             - containerPort: 3000
           env:
