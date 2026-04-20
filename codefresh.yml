@@ -14,8 +14,7 @@ steps:
     type: build
     image_name: kennyocto/showcase
     tag: "${{CF_SHORT_REVISION}}"
-    dockerfile: Dockerfile
-    # Remove the line below if your Dockerfile is in the repo root
+    dockerfile: "${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}/Dockerfile"
     working_directory: "${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}"
 
   # ── 2. Run tests ─────────────────────────────────────────────────────────────
