@@ -12,7 +12,7 @@ steps:
     title: Build Docker image
     stage: build
     type: build
-    image_name: kennethbates/argoapp
+    image_name: kennyocto/showcase
     tag: "${{CF_SHORT_REVISION}}"
     dockerfile: Dockerfile
     # Remove the line below if your Dockerfile is in the repo root
@@ -22,7 +22,7 @@ steps:
   run_tests:
     title: Run tests
     stage: build
-    image: kennethbates/argoapp:${{CF_SHORT_REVISION}}
+    image: kennyocto/showcase:${{CF_SHORT_REVISION}}
     commands:
       - node test.js
     working_directory: /app
@@ -34,12 +34,9 @@ steps:
     image: alpine:3.19
     commands:
       - apk add --no-cache zip
-      - mkdir -p /dist
-      - cd deploy && zip -r /dist/ArgoApp.Manifests.${{CF_BUILD_ID}}.0.0.zip .
-      - echo "Packed /dist/ArgoApp.Manifests.${{CF_BUILD_ID}}.0.0.zip"
-    volumes:
-      - name: dist
-        mountPath: /dist
+      - mkdir -p $CF_VOLUME_PATH/dist
+      - cd $CF_VOLUME_PATH/$CF_REPO_NAME/deploy && zip -r $CF_VOLUME_PATH/dist/ArgoApp.Manifests.${{CF_BUILD_ID}}.0.0.zip .
+      - echo "Packed $CF_VOLUME_PATH/dist/ArgoApp.Manifests.${{CF_BUILD_ID}}.0.0.zip"
 
   # ── 4. Push package to Octopus built-in feed ────────────────────────────────
   push_to_octopus:
@@ -49,13 +46,10 @@ steps:
     commands:
       - >
         octo push
-        --package /dist/ArgoApp.Manifests.${{CF_BUILD_ID}}.0.0.zip
+        --package $CF_VOLUME_PATH/dist/ArgoApp.Manifests.${{CF_BUILD_ID}}.0.0.zip
         --server ${{OCTOPUS_URL}}
         --apiKey ${{OCTOPUS_API_KEY}}
         --space ${{OCTOPUS_SPACE_ID}}
-    volumes:
-      - name: dist
-        mountPath: /dist
 
   # ── 5. Create and deploy an Octopus release ─────────────────────────────────
   create_octopus_release:
