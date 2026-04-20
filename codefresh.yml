@@ -20,7 +20,7 @@ steps:
     title: Build Docker image
     stage: build
     type: build
-    image_name: kennyocto/showcase
+    image_name: kennyocto/argo
     tag: "${{CF_SHORT_REVISION}}"
     dockerfile: Dockerfile
     working_directory: "${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}"
@@ -29,7 +29,7 @@ steps:
   run_tests:
     title: Run tests
     stage: build
-    image: kennyocto/showcase:${{CF_SHORT_REVISION}}
+    image: kennyocto/argo:${{CF_SHORT_REVISION}}
     commands:
       - node test.js
     working_directory: /app
