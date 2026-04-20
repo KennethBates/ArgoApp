@@ -24,6 +24,7 @@ steps:
     tag: "${{CF_SHORT_REVISION}}"
     dockerfile: Dockerfile
     working_directory: "${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}"
+    registry: kennb-dockerhub
 
   # ── 2. Run tests ─────────────────────────────────────────────────────────────
   run_tests:
